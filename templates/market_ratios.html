@@ -1,0 +1,345 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Market Ratios
+{% endblock %}
+
+{% block main %}
+<style>
+    th, td {
+      padding: 5px;
+    }
+    th, td {
+      text-align: left;
+    }
+</style>
+
+
+<div class="container">
+    {% if ratio %}
+    <h1>Answer: {{ ratio | two_dec }}</h1>
+    {% elif x %}
+    <h1>Market Ratios: <span class="text-danger"> at least one of the fields is missing. </span></h1>
+    {% else %}
+    <h1>Market Ratios</h1>
+    {% endif %}
+    <br></br>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Ratio/Term</th>
+            <th scope="col">Formula</th>
+            <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#div_cover">Dividend Cover</button>
+            </td>
+            <td>Earnings per Share / Dividends per Share</td>
+            <td>Earnings compared to dividends.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#div_yield">Dividend Yield</button>
+            </td>
+            <td>Annual Dividends per Share / Price per Share</td>
+            <td>Dividends compared to market capitalization.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dps">DPS</button>
+            </td>
+            <td>Dividends Paid / Number of Shares</td>
+            <td>Dividend Per Share, amount of dividends for each share.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#eps">EPS</button>
+            </td>
+            <td>Net Earnings / Number of Shares</td>
+            <td>Earnings Per Share, amount of earnings for each share.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#payout_ratio">Payout Ratio</button>
+            </td>
+            <td>Dividends / Earnings</td>
+            <td>Dividends per earnings.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#peg_ratio">PEG Ratio</button>
+            </td>
+            <td>Share Price per EPS / Annual EPS Growth</td>
+            <td>Price of a stock compared to company growth.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#p_s">Price to Sales Ratio</button>
+            </td>
+            <td>Price per Share / Revenue per Share</td>
+            <td>Comparing a stock to past performace and market.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal: Dividend Cover Ratio -->
+
+<div class="modal fade" id="div_cover" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/div_cover" method="post">
+                    <div class="form-group">
+                        <label for="eps" class="col-sm-2 col-form-label">EPS:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="eps">
+                    </div>
+                    <div class="form-group">
+                        <label for="dps" class="col-sm-2 col-form-label">DPS:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="dps">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Dividend Yield -->
+
+<div class="modal fade" id="div_yield" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/div_yield" method="post">
+                    <div class="form-group">
+                        <label for="dps" class="col-sm-4 col-form-label">DPS:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="dps">
+                    </div>
+                    <div class="form-group">
+                        <label for="sp" class="col-sm-4 col-form-label">Share Price:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sp">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Dividend Yield -->
+
+<div class="modal fade" id="div_yield" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/div_yield" method="post">
+                    <div class="form-group">
+                        <label for="dps" class="col-sm-4 col-form-label">DPS:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="dps">
+                    </div>
+                    <div class="form-group">
+                        <label for="sp" class="col-sm-4 col-form-label">Share Price:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sp">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: DPS -->
+
+<div class="modal fade" id="dps" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/dps" method="post">
+                    <div class="form-group">
+                        <label for="div" class="col-sm-5 col-form-label">Dividends Paid:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="div">
+                    </div>
+                    <div class="form-group">
+                        <label for="shares" class="col-sm-5 col-form-label">Number of Shares:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="shares">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: EPS -->
+
+<div class="modal fade" id="eps" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/eps" method="post">
+                    <div class="form-group">
+                        <label for="earnings" class="col-sm-5 col-form-label">Net Earnings:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="earnings">
+                    </div>
+                    <div class="form-group">
+                        <label for="shares" class="col-sm-5 col-form-label">Number of Shares:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="shares">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Payout Ratio -->
+
+<div class="modal fade" id="payout_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/payout_ratio" method="post">
+                    <div class="form-group">
+                        <label for="div" class="col-sm-3 col-form-label">Dividends:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="div">
+                    </div>
+                    <div class="form-group">
+                        <label for="earnings" class="col-sm-3 col-form-label">Earnings:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="earnings">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: PEG Ratio -->
+
+<div class="modal fade" id="peg_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/peg_ratio" method="post">
+                    <div class="form-group">
+                        <label for="sp" class="col-sm-5 col-form-label">Share Price:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sp">
+                    </div>
+                    <div class="form-group">
+                        <label for="eps" class="col-sm-5 col-form-label">EPS:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="eps">
+                    </div>
+                    <div class="form-group">
+                        <label for="eps_growth" class="col-sm-5 col-form-label">Annual EPS Growth:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="eps_growth">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Price to Sales Ratio -->
+
+<div class="modal fade" id="p_s" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/p_s" method="post">
+                    <div class="form-group">
+                        <label for="sp" class="col-sm-5 col-form-label">Share Price:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sp">
+                    </div>
+                    <div class="form-group">
+                        <label for="sales" class="col-sm-5 col-form-label">Sales:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sales">
+                    </div>
+                    <div class="form-group">
+                        <label for="shares" class="col-sm-5 col-form-label">Number of Shares:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="shares">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

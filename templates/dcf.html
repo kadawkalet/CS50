@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    DCF Formula
+{% endblock %}
+
+{% block main %}
+{% if x %}
+<h1>Discounted Cash Flows Calculator: <span class="text-danger">At least of the required fields is missing</span></h1>
+{% else %}
+<h1>Discounted Cash Flows Calculator</h1>
+{% endif %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col" role="document">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+            </div>
+            <div class="modal-body">
+                <form action="/dcf" method="post">
+                    <div class="form-group">
+                        <label for="initial" class="col-sm-6 col-form-label">Initial Investment ($):</label>
+                        <input step="any" type="number" min="0" class="form-control" name="initial">
+                    </div>
+                    <div class="form-group">
+                        <label for="rate" class="col-sm-6 col-form-label">Discount Rate (%):</label>
+                        <input step="any" type="number" min="0" class="form-control" name="rate">
+                    </div>
+                    <div class="form-group">
+                        <label for="growth" class="col-sm-6 col-form-label">Growth Rate (%):</label>
+                        <input step="any" type="number" min="0" class="form-control" name="growth">
+                        <br>
+                        {% if z %}
+                        <small class="text-danger">Growth rate must be lower than discount rate.</small>
+                        {% else %}
+                        <small>Growth rate must be lower than discount rate.</small>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="cf" class="col-sm-6 col-form-label">Cash Flows ($):</label>
+                        <input type="text" min="0" class="form-control" name="cf">
+                        {% if y %}
+                        <br>
+                        <small class="text-danger">Input is not in the correct format.</small>
+                        {% else %}
+                        <small></small>
+                        {% endif %}
+                        <br>
+                        <small class="text-right">i.e. Cash Flows: 888.88;-1223.23;2888.85;4555.85;.....;6896.85</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col" role="document">
+            <div class="modal-header">
+                <h5 class="modal-title text-center text-white">.</h5>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Initial Investment:</th>
+                            {% if initial %}
+                            <td>{{ initial | usd }}</td>
+                            {% else %}
+                            <td>{{ 0 | usd }}</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="row">Discount Rate:</th>
+                            {% if rate %}
+                            <td>{{ rate | two_dec }} %</td>
+                            {% else %}
+                            <td>{{ 0 | two_dec }} %</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="row">Growth Rate:</th>
+                            {% if growth %}
+                            <td>{{ growth | two_dec }} %</td>
+                            {% else %}
+                            <td>{{ 0 | two_dec }} %</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="row">Time Period:</th>
+                            {% if period %}
+                            <td>{{ period }} Years</td>
+                            {% else %}
+                            <td>0 Years</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="row">Terminal Value:</th>
+                            {% if terminal %}
+                            <td>{{ terminal | usd }}</td>
+                            {% else %}
+                            <td>{{ 0 | usd }}</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="row">NPV</th>
+                            {% if npv %}
+                            <td>{{ npv | usd }}</td>
+                            {% else %}
+                            <td>{{ 0 | usd }}</td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table Class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Period</th>
+                    <th scope="col">Cash Flows</th>
+                    <th scope="col">Present Value</th>
+                    <th scope="col">NPV</th>
+                </tr>
+            </thead>
+            {% if table %}
+            <tbody>
+                {% for row in table %}
+                    <tr>
+                        <th scope="row">{{ row.period }}</th>
+                        <td>{{ row.cash_flow | usd }}</td>
+                        <td>{{ row.present_value | usd }}</td>
+                        <td>{{ row.npv | usd }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            {% else %}
+            <tbody>
+                <tr>
+                    <th scope="row"> 0 </th>
+                    <td>{{ 0 | usd }}</td>
+                    <td>{{ 0 | usd }}</td>
+                    <td>{{ 0 | usd }}</td>
+                </tr>
+            </tbody>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endblock %}

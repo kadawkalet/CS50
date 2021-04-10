@@ -1,0 +1,428 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Profitability Ratios
+{% endblock %}
+
+{% block main %}
+<style>
+    th, td {
+      padding: 5px;
+    }
+    th, td {
+      text-align: left;
+    }
+</style>
+
+
+<div class="container">
+    {% if ratio %}
+    <h1>Answer: {{ ratio | two_dec }}</h1>
+    {% elif x %}
+    <h1>Profitability Ratios: <span class="text-danger"> at least one of the fields is missing. </span></h1>
+    {% else %}
+    <h1>Profitability Ratios</h1>
+    {% endif %}
+    <br></br>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Ratio/Term</th>
+            <th scope="col">Formula</th>
+            <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#eff_ratio">Efficiency Ratio</button>
+            </td>
+            <td>Non-Interest Expense / Revenue</td>
+            <td>Measures efficiency of asset & liability usage.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gp_ratio">Gross Profit Ratio</button>
+            </td>
+            <td>Gross Profit / Revenue</td>
+            <td>Gross Profit Margin, Gross Margin Percentage, Gross Profit Ratio, Gross Profit Rate, percentage of revenue left after deducting costs.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#r_s">Return on Sales</button>
+            </td>
+            <td>Operating Income / Revenue</td>
+            <td>Operating Margin, Operating Income Margin, Operating Profit Margin, Return on Sales, used to evaluate pricing.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#np_ratio">Net Profit Ratio</button>
+            </td>
+            <td>Net Profit / Revenue</td>
+            <td>Profit Margin, Net Profit Margin, Net Margin, Net Profit Ratio, how much revenue is kept in profit.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#r_a">Return on Assets</button>
+            </td>
+            <td>Net Income / Total Assets</td>
+            <td>Profit compared to assets.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#r_c">Return on Capital</button>
+            </td>
+            <td>EBIT(1 - Tax Rate) / Invested Capital</td>
+            <td>Profit compared to capital.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#r_e">Return on Equity</button>
+            </td>
+            <td>Net Income / Average Shareholder Equity</td>
+            <td>Profit compared to equity.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#r_i">Return on Investment</button>
+            </td>
+            <td>(Gain from Investment - Cost of Investment) / Cost of Investment</td>
+            <td>Measures efficiency of an investment.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#r_na">Return on Net Assets</button>
+            </td>
+            <td>Net Income / (Fixed Assets + Working Capital)</td>
+            <td>Income compared to net assets.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ra_r_c">Risk-Adjusted ROC</button>
+            </td>
+            <td>Expected Return / Economic Capital</td>
+            <td>ROI, adjusted for risk.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal: Efficiency Ratio -->
+
+<div class="modal fade" id="eff_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/eff_ratio" method="post">
+                    <div class="form-group">
+                        <label for="nie" class="col-sm-5 col-form-label">Non-Interest Expense:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="nie">
+                    </div>
+                    <div class="form-group">
+                        <label for="sales" class="col-sm-5 col-form-label">Revenues:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sales">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Gross Profit Ratio -->
+
+<div class="modal fade" id="gp_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/gp_ratio" method="post">
+                    <div class="form-group">
+                        <label for="gp" class="col-sm-5 col-form-label">Gross Profit:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="gp">
+                    </div>
+                    <div class="form-group">
+                        <label for="sales" class="col-sm-5 col-form-label">Revenues:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sales">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Return on Sales -->
+
+<div class="modal fade" id="r_s" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/r_s" method="post">
+                    <div class="form-group">
+                        <label for="oi" class="col-sm-5 col-form-label">Operating Income:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="oi">
+                    </div>
+                    <div class="form-group">
+                        <label for="sales" class="col-sm-5 col-form-label">Revenues:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sales">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Net Profit Ratio -->
+
+<div class="modal fade" id="np_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/np_ratio" method="post">
+                    <div class="form-group">
+                        <label for="np" class="col-sm-5 col-form-label">Net Profit:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="np">
+                    </div>
+                    <div class="form-group">
+                        <label for="sales" class="col-sm-5 col-form-label">Revenues:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="sales">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Return on Asset -->
+
+<div class="modal fade" id="r_a" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/r_a" method="post">
+                    <div class="form-group">
+                        <label for="ni" class="col-sm-5 col-form-label">Net Income:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ni">
+                    </div>
+                    <div class="form-group">
+                        <label for="asset" class="col-sm-5 col-form-label">Total Assets:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="asset">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Return on Capital -->
+
+<div class="modal fade" id="r_c" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/r_c" method="post">
+                    <div class="form-group">
+                        <label for="ebit" class="col-sm-5 col-form-label">EBIT:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ebit">
+                    </div>
+                    <div class="form-group">
+                        <label for="rate" class="col-sm-5 col-form-label">Tax Rate:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="rate">
+                    </div>
+                    <div class="form-group">
+                        <label for="capital" class="col-sm-5 col-form-label">Invested Capital:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="capital">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Return on Equity -->
+
+<div class="modal fade" id="r_e" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/r_e" method="post">
+                    <div class="form-group">
+                        <label for="ni" class="col-sm-5 col-form-label">Net Income:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ni">
+                    </div>
+                    <div class="form-group">
+                        <label for="equity" class="col-sm-5 col-form-label">Average Shareholder Equity:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="equity">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Return on Investment -->
+
+<div class="modal fade" id="r_i" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/r_i" method="post">
+                    <div class="form-group">
+                        <label for="gain" class="col-sm-2 col-form-label">Gain:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="gain">
+                    </div>
+                    <div class="form-group">
+                        <label for="cost" class="col-sm-2 col-form-label">Cost:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="cost">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Return on Net Assets -->
+
+<div class="modal fade" id="r_na" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/r_na" method="post">
+                    <div class="form-group">
+                        <label for="ni" class="col-sm-4 col-form-label">Net Income:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ni">
+                    </div>
+                    <div class="form-group">
+                        <label for="asset" class="col-sm-4 col-form-label">Fixed Assets:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="asset">
+                    </div>
+                    <div class="form-group">
+                        <label for="wc" class="col-sm-4 col-form-label">Working Capital:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="wc">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Return on Risk-Adjusted ROC -->
+
+<div class="modal fade" id="ra_r_c" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/ra_r_c" method="post">
+                    <div class="form-group">
+                        <label for="ereturn" class="col-sm-5 col-form-label">Expected Return:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ereturn">
+                    </div>
+                    <div class="form-group">
+                        <label for="ec" class="col-sm-5 col-form-label">Economic Capital:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ec">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

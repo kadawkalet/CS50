@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Receivables Conversion Period, DSO Ratio
+{% endblock %}
+
+{% block main %}
+    <style>
+        p {
+        text-align: left;
+        }
+    </style>
+
+    <div class="container">
+        {% if ratio %}
+        <h1>Receivables Conversion Period, DSO Ratio:</h1>
+        <h1>({{ acc_receivable | usd }} / {{ net_sales | usd }}) x 365 = {{ ratio | two_dec }} days</h1>
+        {% elif x %}
+        <h1>Receivables Conversion Period, DSO Ratio: <span class="text-danger"> at least one of the fields is missing. </span></h1>
+        {% else %}
+        <h1>Receivables Conversion Period, DSO Ratio</h1>
+        {% endif %}
+        <br><br>
+        <div class="row">
+            <div class="col">
+                <h4 class="p-2 mb-1 text-light bg-dark">Modify the value and click calculate</h4>
+                <form action="/rcp" method="post" class="p-3 mb-2 bg-secondary text-white">
+                    <div class="form-group input-group mb-1 p-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Account Receivables ($)</span>
+                        </div>
+                        <input step="any" autocomplete="off" autofocus class="form-control" name="acc_receivable" placeholder="Account Receivables" type="number" min="0">
+                    </div>
+                    <div class="form-group float-left input-group mb-1 p-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Net Sales ($)</span>
+                        </div>
+                        <input step="any" autocomplete="off" autofocus class="form-control" name="net_sales" placeholder="Net Sales" type="number" min="0">
+                    </div>
+                    <br><br>
+                    <button class="btn btn-primary center" type="submit">Calculate</button>
+                </form>
+            </div>
+            <div class="col">
+                <h4 class="p-2 mb-1 text-light bg-dark">Example of How to Use Receivables Conversion Period</h4>
+                <p>For example, Company A reported $4,000 in beginning accounts receivable and $6,000 in ending accounts receivable for the fiscal year ended 2018, along with credit sales of $120,000. The DSO for Company A would be:</p>
+                <p>DSO = ((($4,000 + $6,000) / 2) / $120,000) x 365 = 15.20</p>
+                <p>Therefore, it takes this company approximately 15 days to collect a typical invoice.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

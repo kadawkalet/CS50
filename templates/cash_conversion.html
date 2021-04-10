@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Cash Conversion Cycle
+{% endblock %}
+
+{% block main %}
+    <style>
+        p {
+        text-align: left;
+        }
+    </style>
+
+    <div class="container-fluid">
+        {% if ratio %}
+        <h1>Cash Conversion Cycle:</h1>
+        <h1>{{ inventory_conversion | two_dec }} days + {{ receivables_conversion | two_dec }} days - {{ payables_conversion | two_dec }} days = {{ ratio | two_dec }} days</h1>
+        {% elif x %}
+        <h1>Cash Conversion Cycle: <span class="text-danger"> at least one of the fields is missing. </span></h1>
+        {% else %}
+        <h1>Cash Conversion Cycle</h1>
+        {% endif %}
+        <br><br>
+        <div class="row">
+            <div class="col">
+                <h4 class="p-2 mb-1 text-light bg-dark">Modify the value and click calculate</h4>
+                <form action="/cash_conversion" method="post" class="p-3 mb-2 bg-secondary text-white">
+                    <div class="form-group input-group mb-1 p-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">ICP (days)</span>
+                        </div>
+                        <input step="any" autocomplete="off" autofocus class="form-control" name="inventory_conversion" placeholder="Inventory Conversion Period" type="number" min="0">
+                    </div>
+                    <div class="form-group float-left input-group mb-1 p-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">RCP (days)</span>
+                        </div>
+                        <input step="any" autocomplete="off" autofocus class="form-control" name="receivables_conversion" placeholder="Receivables Conversion Period" type="number" min="0">
+                    </div>
+                    <div class="form-group float-left input-group mb-1 p-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">PCP (days)</span>
+                        </div>
+                        <input step="any" autocomplete="off" autofocus class="form-control" name="payables_conversion" placeholder="Payables Conversion Period" type="number" min="0">
+                    </div>
+                    <br><br>
+                    <button class="btn btn-primary center" type="submit">Calculate</button>
+                </form>
+            </div>
+            <div class="col">
+                <h4 class="p-2 mb-1 text-light bg-dark">Example of How to Use Cash Conversion Cycle</h4>
+                <p>CCC has a selective application to different industrial sectors based on the nature of business operations. The measure has a great significance for retailers like Walmart Inc. (WMT), Target Corp. (TGT), and Costco Wholesale Corp. (COST), which are involved in buying and managing inventories and selling them to customers. All such businesses may have a high positive value of CCC.</p>
+                <p>However, CCC does not apply to companies that don’t have needs for inventory management. Software companies that offer computer programs through licensing, for instance, can realize sales (and profits) without the need to manage stockpiles. Similarly, insurance or brokerage companies don’t buy items wholesale for retail, so CCC doesn't apply to them.</p>
+                <p>Businesses can have negative CCCs, like online retailers eBay Inc. (EBAY) and Amazon.com Inc. (AMZN). Often, online retailers receive funds in their account for sales of goods that actually belong to and are served by third-party sellers who use the online platform. However, these companies don’t pay the sellers immediately after the sale but may follow a monthly or threshold-based payment cycle. This mechanism allows these companies to hold onto the cash for a longer period of time, so they often end up with a negative CCC. Additionally, if the goods are directly supplied by the third-party seller to the customer, the online retailer never holds any inventory in-house.</p>
+                <p>A Harvard Business blogpost attributes the negative CCC as a key factor in Amazon's survival of the dot-com bubble of 2000.1﻿ Operating with a negative CCC became a source of cash for the company, instead of being a cost for it.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Activity Ratios (Efficiency Ratios)
+{% endblock %}
+
+{% block main %}
+<style>
+    th, td {
+      padding: 5px;
+    }
+    th, td {
+      text-align: left;
+    }
+</style>
+
+<div class="container">
+    <h1>Activity Ratios (Efficiency Ratios)</h1>
+    <br></br>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Ratio/Term</th>
+            <th scope="col">Formula</th>
+            <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row"><a href="/asset_turnover">Asset Turnover</a></th>
+            <td>Net Sales / Average Total Assets</td>
+            <td>Shows relationship between revenue & assets.</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="/avg_collection">Average Collection Period</a></th>
+            <td>Account Receivables / (Annual Credit Sales / 365)</td>
+            <td>The time it takes for receivables to be paid.</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="/cash_conversion">Cash Conversion Cycle</a></th>
+            <td>Inventory Conversion Period + Receivables Conversion Period - Payables Conversion Period</td>
+            <td>Length of time for investment to increase sales.</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="/inventory_conversion_period">Inventory Conversion Period</a></th>
+            <td>(Inventory / Cost of Goods Sold) x 365</td>
+            <td>Measures time between purchasing inventory and selling it.</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="/inventory_conversion">Inventory Conversion Ratio</a></th>
+            <td>(Sales x 0.5) / Cost of Goods Sold</td>
+            <td>Shows how much borrowing is available after inventory becomes a receivable.</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="/it">Inventory Turnover</a></th>
+            <td>Sales / Average Inventory</td>
+            <td>How many times inventory is sold to customers and replaced by the company.</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="/pcp">Payables Conversion Period</a></th>
+            <td>(Accounts Payable / Purchases) x 365</td>
+            <td>Time it takes to pay accounts payable.</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="/rcp">Receivables Conversion Period, DSO Ratio</a></th>
+            <td>(Receivables / Net Sales) x 365</td>
+            <td>Time it takes to collect accounts receivable.</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="/rtr">Receivables Turnover Ratio</a></th>
+            <td>Net Credit Sales / Average Net Receivables</td>
+            <td>Measures how effectively a company uses its assets.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

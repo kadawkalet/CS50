@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Payables Conversion Period
+{% endblock %}
+
+{% block main %}
+    <style>
+        p {
+        text-align: left;
+        }
+    </style>
+
+    <div class="container">
+        {% if ratio %}
+        <h1>Payables Conversion Period:</h1>
+        <h1>({{ acc_payable | usd }} / {{ purchases | usd }}) x 365 = {{ ratio | two_dec }} days</h1>
+        {% elif x %}
+        <h1>Payables Conversion Period: <span class="text-danger"> at least one of the fields is missing. </span></h1>
+        {% else %}
+        <h1>Payables Conversion Period</h1>
+        {% endif %}
+        <br><br>
+        <div class="row">
+            <div class="col">
+                <h4 class="p-2 mb-1 text-light bg-dark">Modify the value and click calculate</h4>
+                <form action="/pcp" method="post" class="p-3 mb-2 bg-secondary text-white">
+                    <div class="form-group input-group mb-1 p-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Account Payable ($)</span>
+                        </div>
+                        <input step="any" autocomplete="off" autofocus class="form-control" name="acc_payable" placeholder="Account Payable" type="number" min="0">
+                    </div>
+                    <div class="form-group float-left input-group mb-1 p-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Purchases ($)</span>
+                        </div>
+                        <input step="any" autocomplete="off" autofocus class="form-control" name="purchases" placeholder="Purchases" type="number" min="0">
+                    </div>
+                    <br><br>
+                    <button class="btn btn-primary center" type="submit">Calculate</button>
+                </form>
+            </div>
+            <div class="col">
+                <h4 class="p-2 mb-1 text-light bg-dark">Example of How to Use Payables Conversion Period</h4>
+                <p>Tim’s Tackle is a retailer that sells outdoor and fishing equipment. Tim buys its inventory from one main vendor and pays its accounts within 10 days in order to get a purchase discount. Tim has a fairly high inventory turnover ratio for his industry and can collect accounts receivable from his customer within 30 days on average.</p>
+                <p>Tim’s days calculations are as follows: DIO represents days inventory outstanding: 15 days; DSO represents days sales outstanding: 2 days; DPO represents days payable outstanding: 12 days</p>
+                <p>As you can see, Tim’s cash conversion cycle is 5 days. This means it takes Tim 5 days from paying for his inventory to receive the cash from its sale. Tim would have to compare his cycle to other companies in his industry over time to see if his cycle is reasonable or needs to be improved.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Liquidity Ratios
+{% endblock %}
+
+{% block main %}
+<style>
+    th, td {
+      padding: 5px;
+    }
+    th, td {
+      text-align: left;
+    }
+</style>
+
+
+<div class="container">
+    {% if ratio %}
+    <h1>Answer: {{ ratio | two_dec }}</h1>
+    {% elif x %}
+    <h1>Liquidity Ratios: <span class="text-danger"> at least one of the fields is missing. </span></h1>
+    {% else %}
+    <h1>Liquidity Ratios</h1>
+    {% endif %}
+    <br></br>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Ratio/Term</th>
+            <th scope="col">Formula</th>
+            <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#quick_ratio">Quick Ratio</button>
+            </td>
+            <td>(Current Assets - Inventories) / Current Liabilities</td>
+            <td>A quick way to measure a company's liquidity.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cash_ratio">Cash Ratio</button>
+            </td>
+            <td>(Cash + Marketable Securities) / Current Liabilities</td>
+            <td>Cash compared to liabilities.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#current_ratio">Current Ratio</button>
+            </td>
+            <td>Current Assets / Current Liabilities</td>
+            <td>Current Ratio, Working Capital Ratio, measures ability to pay short-term liabilities.</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ocf_ratio">OCF Ratio</button>
+            </td>
+            <td>Operating Cash Flow / Total Debts</td>
+            <td>Operating Cash Flow Ratio, ability to pay liabilities with operating cash flow.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal: Quick Ratio -->
+
+<div class="modal fade" id="quick_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/quick_ratio" method="post">
+                    <div class="form-group">
+                        <label for="ca" class="col-sm-5 col-form-label">Current Assets:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ca">
+                    </div>
+                    <div class="form-group">
+                        <label for="inventory" class="col-sm-5 col-form-label">Inventory:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="inventory">
+                    </div>
+                    <div class="form-group">
+                        <label for="cl" class="col-sm-5 col-form-label">Current Liabilities:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="cl">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Quick Ratio -->
+
+<div class="modal fade" id="cash_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/cash_ratio" method="post">
+                    <div class="form-group">
+                        <label for="cash" class="col-sm-5 col-form-label">Cash:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="cash">
+                    </div>
+                    <div class="form-group">
+                        <label for="ms" class="col-sm-5 col-form-label">Marketable Securities:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ms">
+                    </div>
+                    <div class="form-group">
+                        <label for="cl" class="col-sm-5 col-form-label">Current Liabilities:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="cl">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Current Ratio -->
+
+<div class="modal fade" id="current_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/current_ratio" method="post">
+                    <div class="form-group">
+                        <label for="ca" class="col-sm-5 col-form-label">Current Asssets:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ca">
+                    </div>
+                    <div class="form-group">
+                        <label for="cl" class="col-sm-5 col-form-label">Current Liabilities:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="cl">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Operating Cash Flow Ratio -->
+
+<div class="modal fade" id="ocf_ratio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modify the value and click calculate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/ocf_ratio" method="post">
+                    <div class="form-group">
+                        <label for="ocf" class="col-sm-5 col-form-label">Operating Cash Flow:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="ocf">
+                    </div>
+                    <div class="form-group">
+                        <label for="td" class="col-sm-5 col-form-label">Total Debts:</label>
+                        <input step="any" type="number" min="0" class="form-control" name="td">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
